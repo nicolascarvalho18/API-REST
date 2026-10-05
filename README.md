@@ -1,22 +1,45 @@
 # Users REST API
 
-API REST de usuários em JavaScript com Node.js, Express, PostgreSQL e Prisma. Inclui autenticação JWT, refresh tokens rotativos, validação Zod, testes de integração e documentação Swagger.
+API REST desenvolvida em **JavaScript, Node.js e Express**, com PostgreSQL e Prisma ORM. Segue uma arquitetura **MVC adaptada para APIs REST**, complementada por camadas de Service e Repository.
 
-## Arquitetura
+### Tecnologias
 
-O fluxo é `route → middleware → controller → service → repository → Prisma/PostgreSQL`. Controllers coordenam HTTP e serialização; serviços implementam regras e autorização; repositórios concentram persistência; o modelo expõe somente campos públicos. Os erros seguem um middleware único, com formato `{ "error": { "code", "message", "details?" } }`.
+- Node.js e Express
+- PostgreSQL e Prisma ORM
+- JWT e Argon2id
+- Zod
+- Swagger/OpenAPI
+- Jest e Supertest
 
-## Principais pontos positivos
+### Arquitetura
 
-- **Organização:** Controllers, Services e Repository têm responsabilidades separadas, facilitando manutenção e evolução.
-- **Segurança:** senhas são armazenadas com Argon2id e as respostas públicas nunca incluem senha ou hash.
+- **Model:** modelagem dos dados e representação das entidades.
+- **Controller:** coordenação das requisições e respostas HTTP.
+- **Service:** regras de negócio e autorização.
+- **Repository:** acesso persistente ao banco de dados.
+- **Routes e Middlewares:** roteamento, autenticação, validação e tratamento de erros.
+
+### Funcionalidades
+
+- CRUD de usuários
+- Autenticação JWT com refresh tokens rotativos
+- Controle de acesso e proteção de senhas com Argon2id
+- Validação de entrada e tratamento centralizado de erros
+- Testes de integração e documentação Swagger
+
+O projeto prioriza segurança, organização, baixo acoplamento e facilidade de manutenção e evolução.
+
+### Principais pontos positivos
+
+- **Organização:** separação entre Controllers, Services e Repository, facilitando manutenção e evolução.
+- **Segurança:** senhas protegidas com Argon2id e respostas sem expor senha ou hash.
 - **Controle de acesso:** cada usuário só pode consultar, atualizar ou excluir a própria conta.
-- **Autenticação:** access tokens JWT têm curta duração; refresh tokens são armazenados como hash, rotacionados e revogáveis.
-- **Validação:** Zod verifica tipos e formatos, rejeita campos extras e normaliza e-mails.
-- **Integridade:** índice único no PostgreSQL previne e-mails duplicados mesmo em criações concorrentes.
-- **Tratamento de erros:** respostas HTTP seguem formato padronizado sem expor stack traces ou valores recebidos.
-- **Documentação:** Swagger/OpenAPI permite consultar e experimentar os endpoints.
-- **Qualidade:** inclui 12 cenários de integração com PostgreSQL e um teste de health/Swagger; ESLint e Prettier estão configurados.
+- **Autenticação:** JWT com expiração curta e refresh tokens com rotação e revogação.
+- **Validação:** Zod verifica os dados, rejeita campos extras e normaliza o e-mail.
+- **Integridade:** restrição única no PostgreSQL previne e-mails duplicados, inclusive em criações concorrentes.
+- **Tratamento de erros:** respostas HTTP padronizadas, sem revelar detalhes internos.
+- **Documentação:** Swagger permite consultar e experimentar os endpoints.
+- **Qualidade:** 12 cenários de integração e um teste de health/Swagger; ESLint e Prettier estão configurados.
 
 Os testes de integração usam um banco PostgreSQL isolado chamado `users_api_test`. A execução completa requer que o PostgreSQL esteja disponível e que as migrations tenham sido aplicadas; consulte [Testes e qualidade](#testes-e-qualidade).
 
